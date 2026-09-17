@@ -39,9 +39,9 @@ const Toast: React.FC<ToastProps> = ({
   };
 
   const severityClasses = {
-    error: 'bg-danger text-white',
-    success: 'bg-success text-white',
-    warning: 'bg-warning text-white',
+    error: 'argf-bg-danger argf-text-white',
+    success: 'argf-bg-success argf-text-white',
+    warning: 'argf-bg-warning argf-text-white',
   };
 
   const severityIcons = {
@@ -52,18 +52,20 @@ const Toast: React.FC<ToastProps> = ({
 
   return (
     <div
-      className={`relative px-3 py-2 flex flex-row items-center gap-2 rounded-lg w-[20em] text-[14px] shadow-md transform transition-all duration-300 ease-in-out 
-        ${isVisible && !isClosing ? 'translate-y-0 opacity-100' : 'translate-y-5 opacity-0'}
+      className={`argf-box-border argf-relative argf-px-3 argf-py-2 argf-flex argf-flex-row argf-items-center argf-gap-2 argf-rounded-lg argf-w-[20em] argf-text-[14px] argf-shadow-md argf-transform argf-transition-all argf-duration-300 argf-ease-in-out 
+        ${isVisible && !isClosing ? 'argf-translate-y-0 argf-opacity-100' : 'argf-translate-y-5 argf-opacity-0'}
         ${severityClasses[severity]}`}
     >
-      <span>{severityIcons[severity]}</span>
-      <span>{message}</span>
-      <span
-        className='absolute top-50 right-2 cursor-pointer'
+      <span className='argf-flex argf-items-center'>{severityIcons[severity]}</span>
+      <span className='argf-flex-1'>{message}</span>
+      <button
+        type='button'
+        className='argf-border-0 argf-outline-none argf-bg-transparent argf-cursor-pointer argf-text-white/80 hover:argf-text-white argf-flex argf-items-center argf-p-1 argf-rounded'
         onClick={handleClose}
+        aria-label='Close toast'
       >
         <XIcon />
-      </span>
+      </button>
     </div>
   );
 };

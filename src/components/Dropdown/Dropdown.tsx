@@ -63,21 +63,19 @@ interface DropdownProps {
 
   /**
    * Custom class name to be applied to the dropdown
-   * e.g. 'text-red-500'
    */
   className?: string;
 
   /**
-   * Custom class name to be applied to the option label
-   * e.g. 'text-red-500'
-   */
-  labelClassName?: string;
-
-  /**
-   * Whether the dropdown should be searchable
+   * If true, the dropdown will be searchable
    * @default false
    */
   isSearchable?: boolean;
+
+  /**
+   * Custom class name to be applied to the label
+   */
+  labelClassName?: string;
 }
 
 const Dropdown: React.FC<DropdownProps> = ({
@@ -86,57 +84,55 @@ const Dropdown: React.FC<DropdownProps> = ({
   placeholder = 'Select an option',
   size = 'medium',
   disabled = false,
-  initialValue = null,
+  initialValue,
   style,
   className,
-  labelClassName,
   isSearchable = false,
+  labelClassName,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedOption, setSelectedOption] = useState<Option | null>(
-    initialValue,
+    initialValue || null,
   );
   const [searchTerm, setSearchTerm] = useState('');
   const [maxHeight, setMaxHeight] = useState('0px');
   const dropdownRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    if (initialValue) {
-      setSelectedOption(initialValue);
+  const handleToggle = () => {
+    if (!disabled) {
+      setIsOpen(!isOpen);
+      setMaxHeight(isOpen ? '0px' : '300px');
     }
-  }, [initialValue]);
+  };
+
+  const handleSelect = (option: Option) => {
+    setSelectedOption(option);
+    onSelect(option);
+    setIsOpen(false);
+    setSearchTerm('');
+    setMaxHeight('0px');
+  };
+
+  const handleClickOutside = (event: MouseEvent) => {
+    if (
+      dropdownRef.current &&
+      !dropdownRef.current.contains(event.target as Node)
+    ) {
+      setIsOpen(false);
+      setSearchTerm('');
+      setMaxHeight('0px');
+    }
+  };
 
   useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        dropdownRef.current &&
-        !dropdownRef.current.contains(event.target as Node)
-      ) {
-        setIsOpen(false);
-        setMaxHeight('0px');
-      }
-    };
-
     document.addEventListener('mousedown', handleClickOutside);
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, []);
 
-  const handleToggle = () => {
-    if (!disabled) {
-      setIsOpen(!isOpen);
-      const newMaxHeight = isOpen
-        ? '0px'
-        : `${Math.min(options.length * 180)}px`;
-      setMaxHeight(newMaxHeight);
-    }
-  };
-
-  const handleSelect = (option: Option) => {
-    if (!disabled) {
-      setSelectedOption(option);
-      onSelect(option);
+  const handleKeyDown = (event: KeyboardEvent) => {
+    if (event.key === 'Escape') {
       setIsOpen(false);
       setSearchTerm('');
       setMaxHeight('0px');
@@ -148,41 +144,42 @@ const Dropdown: React.FC<DropdownProps> = ({
   );
 
   const sizeClass =
-    size === 'small' ? 'w-32' : size === 'large' ? 'w-64' : 'w-48';
+    size === 'small' ? 'argf-w-32' : size === 'large' ? 'argf-w-64' : 'argf-w-48';
 
   return (
     <div
       ref={dropdownRef}
-      className={clsx('relative inline-block text-left', sizeClass, className)}
+      className={clsx('argf-relative argf-inline-block argf-text-left argf-box-border', sizeClass, className)}
       style={style}
     >
       <button
+        type='button'
         onClick={handleToggle}
         className={clsx(
-          'inline-flex items-center gap-2 justify-left',
+          'argf-inline-flex argf-items-center argf-gap-2 argf-justify-start argf-box-border argf-outline-none',
           sizeClass,
-          'rounded-md border border-gray-300 px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50',
-          { 'cursor-not-allowed opacity-50': disabled },
+          'argf-rounded-md argf-border argf-border-solid argf-border-gray-300 argf-px-4 argf-py-2 argf-bg-white argf-text-sm argf-font-medium argf-text-gray-700 hover:argf-bg-gray-50 argf-cursor-pointer',
+          { 'argf-cursor-not-allowed argf-opacity-50': disabled },
         )}
         disabled={disabled}
       >
         <span
-          className={clsx({ 'text-gray-400': !selectedOption }, labelClassName)}
+          className={clsx({ 'argf-text-gray-400': !selectedOption }, labelClassName)}
         >
           {selectedOption ? selectedOption.label : placeholder}
         </span>
-        <ChevronDownIcon className='ml-auto' />
+        <ChevronDownIcon className='argf-ml-auto' />
       </button>
       <div
         className={clsx(
-          'absolute z-50 mt-2 transition-all duration-300 ease-in-out',
+          'argf-absolute argf-z-50 argf-mt-2 argf-transition-all argf-duration-300 argf-ease-in-out argf-box-border',
           sizeClass,
-          'rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5',
+          'argf-rounded-md argf-bg-white argf-shadow-lg argf-ring-1 argf-ring-black argf-ring-opacity-5',
           {
-            'opacity-0': !isOpen,
-            'opacity-100': isOpen,
-            invisible: !isOpen,
-            visible: isOpen,
+            'argf-opacity-0': !isOpen,
+            'argf-opacity-100': isOpen,
+            'argf-invisible': !isOpen,
+            'argf-visible': isOpen,
           },
         )}
         style={{
@@ -196,16 +193,16 @@ const Dropdown: React.FC<DropdownProps> = ({
             type='text'
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className='w-full px-4 font-medium py-2 text-sm rounded-t-md border-b border-gray-300 focus:outline-none'
+            className='argf-w-full argf-px-4 argf-font-medium argf-py-2 argf-text-sm argf-rounded-t-md argf-border-b argf-border-solid argf-border-gray-300 focus:argf-outline-none argf-bg-white argf-text-slate-900 argf-box-border'
             placeholder='Search...'
           />
         )}
-        <ul className='max-h-60 overflow-auto px-2 py-2'>
+        <ul className='argf-list-none argf-m-0 argf-max-h-60 argf-overflow-auto argf-px-2 argf-py-2'>
           {filteredOptions.map((option, index) => (
             <li
               key={index}
               onClick={() => handleSelect(option)}
-              className='cursor-pointer select-none py-2 px-3 font-medium text-sm relative rounded-md hover:bg-gray-100 hover:text-dark'
+              className='argf-cursor-pointer argf-select-none argf-py-2 argf-px-3 argf-font-medium argf-text-sm argf-relative argf-rounded-md hover:argf-bg-gray-100 hover:argf-text-slate-900 argf-text-slate-700 argf-m-0'
             >
               {option.label}
             </li>

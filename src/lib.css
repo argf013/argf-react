@@ -1,0 +1,5 @@
+/* Dedicated entry point for the compiled component library CSS.
+   Preflight (@tailwind base) is intentionally excluded to prevent
+   resetting consumer applications' global HTML elements.
+*/
+@tailwind utilities;

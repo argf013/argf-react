@@ -97,19 +97,19 @@ export const Accordion: React.FC<AccordionProps> = ({
     <div
       id='accordion-collapse'
       data-accordion='collapse'
-      className={accordionClassName}
+      className={`argf-box-border ${accordionClassName}`}
     >
       {items.map((item, index) => (
         <div
           key={index}
-          className={`${itemClassName} ${index === items.length - 1 ? 'border-b' : ''}`}
+          className={`argf-box-border ${itemClassName} ${index === items.length - 1 ? 'argf-border-b argf-border-solid argf-border-gray-200' : ''}`}
         >
-          <h2 id={`accordion-collapse-heading-${index}`}>
+          <h2 id={`accordion-collapse-heading-${index}`} className='argf-m-0 argf-p-0 argf-border-0'>
             <button
               type='button'
-              className={`flex items-center justify-between bg-gray-100 hover:bg-gray-200 w-full p-5 font-medium rtl:text-right text-gray-500 border border-b-0 border-gray-200 ${
-                index === 0 ? 'rounded-tl-xl rounded-tr-xl' : ''
-              } hover:bg-gray-100 gap-3 ${headingClassName}`}
+              className={`argf-box-border argf-flex argf-items-center argf-justify-between argf-bg-gray-100 hover:argf-bg-gray-200 argf-w-full argf-p-5 argf-font-medium rtl:argf-text-right argf-text-gray-500 argf-border argf-border-solid argf-border-b-0 argf-border-gray-200 argf-cursor-pointer argf-outline-none ${
+                index === 0 ? 'argf-rounded-tl-xl argf-rounded-tr-xl' : ''
+              } hover:argf-bg-gray-100 argf-gap-3 ${headingClassName}`}
               onClick={() => toggleAccordion(index)}
               aria-expanded={expanded.includes(index)}
               aria-controls={`accordion-collapse-body-${index}`}
@@ -117,16 +117,17 @@ export const Accordion: React.FC<AccordionProps> = ({
               <span>{item.title}</span>
               <ChevronDownIcon
                 size={24}
-                className={`transform transition-transform duration-300 ${expanded.includes(index) ? 'rotate-180' : 'rotate-0'}`}
+                className={`argf-transform argf-transition-transform argf-duration-300 ${expanded.includes(index) ? 'argf-rotate-180' : 'argf-rotate-0'}`}
               />
             </button>
           </h2>
           <div
             id={`accordion-collapse-body-${index}`}
-            className={`transition-max-height bg-[#f5f6f7] duration-${animationDuration} ease-in-out overflow-hidden ${expanded.includes(index) ? 'max-h-screen' : 'max-h-0'} ${contentClassName}`}
+            style={{ transitionDuration: `${animationDuration}ms` }}
+            className={`argf-box-border argf-transition-all argf-bg-[#f5f6f7] argf-ease-in-out argf-overflow-hidden ${expanded.includes(index) ? 'argf-max-h-screen' : 'argf-max-h-0'} ${contentClassName}`}
             aria-labelledby={`accordion-collapse-heading-${index}`}
           >
-            <div className='p-5 text-sm border border-b-0 border-gray-200 '>
+            <div className='argf-p-5 argf-text-sm argf-border argf-border-solid argf-border-b-0 argf-border-gray-200 argf-box-border'>
               {item.content}
             </div>
           </div>

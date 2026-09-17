@@ -53,19 +53,19 @@ const Button: React.FC<ButtonProps> = ({
 }) => {
   const getButtonClass = (severity: string) => {
     const baseClass =
-      'text-white font-medium text-[14px] px-5 py-2.5 inline-block';
-    const roundedClass = rounded ? 'rounded-full' : 'rounded-md';
+      'argf-text-white argf-font-medium argf-text-[14px] argf-px-5 argf-py-2.5 argf-inline-block';
+    const roundedClass = rounded ? 'argf-rounded-full' : 'argf-rounded-md';
     switch (severity) {
       case 'primary':
-        return `${baseClass} ${roundedClass} bg-primary hover:bg-primary-hover`;
+        return `${baseClass} ${roundedClass} argf-bg-primary hover:argf-bg-primary-hover`;
       case 'secondary':
-        return `${baseClass} ${roundedClass} bg-secondary hover:bg-secondary-hover`;
+        return `${baseClass} ${roundedClass} argf-bg-secondary hover:argf-bg-secondary-hover`;
       case 'danger':
-        return `${baseClass} ${roundedClass} bg-danger hover:bg-danger-hover`;
+        return `${baseClass} ${roundedClass} argf-bg-danger hover:argf-bg-danger-hover`;
       case 'warning':
-        return `${baseClass} ${roundedClass} bg-warning hover:bg-warning-hover`;
+        return `${baseClass} ${roundedClass} argf-bg-warning hover:argf-bg-warning-hover`;
       case 'success':
-        return `${baseClass} ${roundedClass} bg-success hover:bg-success-hover`;
+        return `${baseClass} ${roundedClass} argf-bg-success hover:argf-bg-success-hover`;
       default:
         return baseClass;
     }
@@ -74,14 +74,15 @@ const Button: React.FC<ButtonProps> = ({
   return (
     <button
       className={clsx(
+        'argf-border-0 argf-outline-none',
         getButtonClass(severity as Severity),
-        'flex flex-row items-center',
+        'argf-flex argf-flex-row argf-items-center',
         className,
       )}
       onClick={onClick}
       style={style}
     >
-      {icon && <span className='mr-2'>{icon}</span>}
+      {icon && <span className='argf-mr-2'>{icon}</span>}
       <span>{label}</span>
     </button>
   );

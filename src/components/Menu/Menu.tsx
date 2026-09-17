@@ -58,12 +58,12 @@ export interface MenuProps {
 
   /**
    * Menu size
-   * @default medium
+   * @default 'medium'
    */
   size?: 'small' | 'medium' | 'large';
 
   /**
-   * Set menu as vertical
+   * Display icon vertically
    * @default false
    */
   vertical?: boolean;
@@ -79,13 +79,12 @@ const Menu: React.FC<MenuProps> = ({
   vertical = false,
 }) => {
   const [openMenu, setOpenMenu] = useState(false);
-  const menuRef = useRef<HTMLDivElement | null>(null);
+  const menuRef = useRef<HTMLDivElement>(null);
 
   const handleClick = (item: MenuItem) => {
-    if (!item.disabled && item.onClick) {
-      item.onClick();
-      setOpenMenu(false);
-    }
+    if (item.disabled) return;
+    if (item.onClick) item.onClick();
+    setOpenMenu(false);
   };
 
   const handleClickOutside = (event: MouseEvent) => {
@@ -94,62 +93,57 @@ const Menu: React.FC<MenuProps> = ({
     }
   };
 
-  const sizeClasses = {
-    small: 'p-3 text-sm w-32',
-    medium: 'p-4 text-sm w-52',
-    large: 'p-5 text-lg w-64',
-  };
-
   useEffect(() => {
-    if (openMenu) {
-      document.addEventListener('mousedown', handleClickOutside);
-    } else {
-      document.removeEventListener('mousedown', handleClickOutside);
-    }
-
+    document.addEventListener('mousedown', handleClickOutside);
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, [openMenu]);
+  }, []);
+
+  const sizeClasses = {
+    small: 'argf-w-36 argf-p-1 argf-text-xs',
+    medium: 'argf-w-48 argf-p-1.5 argf-text-sm',
+    large: 'argf-w-56 argf-p-2 argf-text-base',
+  };
 
   return (
-    <div ref={menuRef} className={`relative inline-block ${className || ''}`} style={style}>
+    <div ref={menuRef} className={`argf-relative argf-inline-block argf-box-border ${className || ''}`} style={style}>
       <button
         type='button'
         aria-haspopup='true'
         aria-expanded={openMenu}
-        className='menu-button p-2 text-slate-700 rounded-full hover:bg-slate-200 transition-colors flex items-center justify-center'
+        className='argf-border-0 argf-outline-none argf-bg-transparent menu-button argf-p-2 argf-text-slate-700 argf-rounded-full hover:argf-bg-slate-200 argf-transition-colors argf-flex argf-items-center argf-justify-center argf-cursor-pointer'
         onClick={() => setOpenMenu(!openMenu)}
       >
-        <KebabHorizontalIcon className={vertical ? 'rotate-90' : ''} />
+        <KebabHorizontalIcon className={vertical ? 'argf-rotate-90' : ''} />
       </button>
       <div
-        className={`absolute z-50 left-0 mt-1 transition-all transform duration-200 ease-out ${
+        className={`argf-absolute argf-z-50 argf-left-0 argf-mt-1 argf-transition-all argf-transform argf-duration-200 argf-ease-out ${
           openMenu
-            ? 'translate-y-0 opacity-100 scale-100'
-            : '-translate-y-2 opacity-0 scale-95 pointer-events-none'
-        } origin-top-left`}
+            ? 'argf-translate-y-0 argf-opacity-100 argf-scale-100'
+            : '-argf-translate-y-2 argf-opacity-0 argf-scale-95 argf-pointer-events-none'
+        } argf-origin-top-left`}
       >
         <ul
-          className={`menu-list flex gap-1 flex-col bg-white border border-gray-200 shadow-xl rounded-lg ${sizeClasses[size]} ${itemClassName || ''}`}
+          className={`menu-list argf-list-none argf-m-0 argf-flex argf-gap-1 argf-flex-col argf-bg-white argf-border argf-border-solid argf-border-gray-200 argf-shadow-xl argf-rounded-lg argf-box-border ${sizeClasses[size]} ${itemClassName || ''}`}
           style={itemStyle}
         >
           {items.map((item, index) => (
             <li
               key={index}
-              className={`menu-item px-2.5 py-1.5 rounded-md transition-colors ${
+              className={`menu-item argf-px-2.5 argf-py-1.5 argf-rounded-md argf-transition-colors ${
                 item.disabled
-                  ? 'opacity-40 cursor-not-allowed'
+                  ? 'argf-opacity-40 argf-cursor-not-allowed'
                   : item.danger
-                    ? 'text-red-600 hover:bg-red-50 cursor-pointer'
-                    : 'text-slate-700 hover:bg-slate-100 cursor-pointer'
-              } gap-2.5 flex items-center`}
+                    ? 'argf-text-red-600 hover:argf-bg-red-50 argf-cursor-pointer'
+                    : 'argf-text-slate-700 hover:argf-bg-slate-100 argf-cursor-pointer'
+              } argf-gap-2.5 argf-flex argf-items-center argf-m-0`}
               onClick={() => handleClick(item)}
             >
               {item.icon && (
-                <span className='flex items-center'>{item.icon}</span>
+                <span className='argf-flex argf-items-center'>{item.icon}</span>
               )}
-              <span className='flex-1 whitespace-nowrap'>{item.label}</span>
+              <span className='argf-flex-1 argf-whitespace-nowrap'>{item.label}</span>
             </li>
           ))}
         </ul>

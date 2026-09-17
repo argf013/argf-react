@@ -66,7 +66,7 @@ const Input: React.FC<InputProps> = ({
   label,
   disabled = false,
   style,
-  className,
+  className = '',
   required = false,
 }) => {
   const [isTouched, setIsTouched] = useState(false);
@@ -75,16 +75,16 @@ const Input: React.FC<InputProps> = ({
 
   switch (size) {
     case 'small':
-      sizeClass = 'px-2 py-1 text-sm max-w-[10em]';
+      sizeClass = 'argf-px-2 argf-py-1 argf-text-sm argf-max-w-[10em]';
       break;
     case 'medium':
-      sizeClass = 'px-4 py-2 text-sm font-medium max-w-[15em]';
+      sizeClass = 'argf-px-4 argf-py-2 argf-text-sm argf-font-medium argf-max-w-[15em]';
       break;
     case 'large':
-      sizeClass = 'px-6 py-3 text-lg max-w-[20em]';
+      sizeClass = 'argf-px-6 argf-py-3 argf-text-lg argf-max-w-[20em]';
       break;
     default:
-      sizeClass = 'px-4 py-2 text-base max-w-[15em]';
+      sizeClass = 'argf-px-4 argf-py-2 argf-text-base argf-max-w-[15em]';
   }
 
   const handleBlur = () => {
@@ -92,12 +92,12 @@ const Input: React.FC<InputProps> = ({
   };
 
   const borderClass =
-    required && isTouched && !value ? 'border-danger' : 'border-gray-300';
+    required && isTouched && !value ? 'argf-border-danger' : 'argf-border-gray-300';
 
   return (
-    <div>
+    <div className='argf-box-border'>
       {label && (
-        <label htmlFor={label} className='block mb-[0.5px] text-sm'>
+        <label htmlFor={label} className='argf-block argf-mb-[0.5px] argf-text-sm argf-text-slate-700'>
           {label}
         </label>
       )}
@@ -110,7 +110,7 @@ const Input: React.FC<InputProps> = ({
         onBlur={handleBlur}
         disabled={disabled}
         style={style}
-        className={`${sizeClass} border focus:outline-gray-700 ${borderClass} rounded-md ${className}`}
+        className={`${sizeClass} argf-box-border argf-border argf-border-solid focus:argf-outline-gray-700 ${borderClass} argf-rounded-md argf-bg-white argf-text-slate-900 ${className}`}
         required={required}
       />
     </div>

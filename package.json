@@ -29,8 +29,8 @@
   "scripts": {
     "dev": "vite",
     "clean": "rimraf dist",
-    "build:css": "npx tailwindcss -i ./src/index.css -o ./style.css",
-    "build": "npm run clean && npm run build:css && tsc && vite build && grunt bump",
+    "build:css": "npx tailwindcss -c ./tailwind.config.lib.cjs -i ./src/lib.css -o ./style.css",
+    "build": "pnpm run clean && pnpm run build:css && pnpm exec tsc && pnpm exec vite build && pnpm exec grunt bump",
     "lint": "eslint . --ignore-pattern dist *.cjs",
     "preview": "vite preview",
     "prepublishOnly": "npm run build",

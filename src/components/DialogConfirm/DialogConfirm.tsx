@@ -102,11 +102,11 @@ const DialogConfirm: React.FC<DialogConfirmProps> = ({
     (severity: 'info' | 'warning' | 'danger') => {
       switch (severity) {
         case 'warning':
-          return 'bg-warning hover:bg-warning-hover text-white hover:text-gray-100';
+          return 'argf-bg-warning hover:argf-bg-warning-hover argf-text-white hover:argf-text-gray-100';
         case 'danger':
-          return 'bg-danger hover:bg-danger-hover text-white hover:text-gray-100';
+          return 'argf-bg-danger hover:argf-bg-danger-hover argf-text-white hover:argf-text-gray-100';
         default:
-          return 'bg-primary hover:bg-primary-hover text-white hover:text-gray-100';
+          return 'argf-bg-primary hover:argf-bg-primary-hover argf-text-white hover:argf-text-gray-100';
       }
     },
     [],
@@ -137,9 +137,9 @@ const DialogConfirm: React.FC<DialogConfirmProps> = ({
     >
       <div>
         <span>{message}</span>
-        <ul className='list-disc px-2 py-2'>
+        <ul className='argf-list-none argf-m-0 argf-px-2 argf-py-2'>
           {items?.map((item, index) => (
-            <li key={index} className='truncate ... max-w-xs'>
+            <li key={index} className='argf-truncate argf-max-w-xs argf-m-0 argf-p-0'>
               <span>&#8226; </span>
               <span
                 data-tooltip-id={`tooltip-${index}`}
@@ -151,16 +151,18 @@ const DialogConfirm: React.FC<DialogConfirmProps> = ({
             </li>
           ))}
         </ul>
-        <div className='flex justify-end gap-2 mt-4'>
+        <div className='argf-flex argf-justify-end argf-gap-2 argf-mt-4'>
           <button
+            type='button'
             onClick={onCancel}
-            className='hover:bg-gray-200 py-2 px-5  rounded-full'
+            className='argf-border-0 argf-outline-none argf-bg-transparent hover:argf-bg-gray-200 argf-py-2 argf-px-5 argf-rounded-full argf-cursor-pointer'
           >
             {cancelLabel}
           </button>
           <button
+            type='button'
             onClick={onSubmit}
-            className={`${getButtonClass(severity)} py-2 px-5 rounded-full`}
+            className={`argf-border-0 argf-outline-none ${getButtonClass(severity)} argf-py-2 argf-px-5 argf-rounded-full argf-cursor-pointer`}
           >
             {submitLabel}
           </button>

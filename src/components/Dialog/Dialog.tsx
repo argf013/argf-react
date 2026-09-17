@@ -95,45 +95,46 @@ const Dialog: React.FC<DialogProps> = ({
   }, [visible, closeable, onClose]);
 
   const sizeClasses = {
-    small: 'w-1/4 min-w-[15em]',
-    medium: 'w-1/3 min-w-[20em]',
-    large: 'w-1/2 min-w-[30em]',
+    small: 'argf-w-1/4 argf-min-w-[15em]',
+    medium: 'argf-w-1/3 argf-min-w-[20em]',
+    large: 'argf-w-1/2 argf-min-w-[30em]',
   };
 
   const severityClasses = {
-    info: 'text-primary',
-    danger: 'text-danger',
-    warning: 'text-warning',
+    info: 'argf-text-primary',
+    danger: 'argf-text-danger',
+    warning: 'argf-text-warning',
   };
 
   return (
     <>
       {(show || isClosing) && (
         <div
-          className={`fixed z-50 inset-0 flex items-center justify-center backdrop-blur transition-all transform transition-opacity duration-300 ease-in-out ${animate ? 'opacity-100' : 'opacity-0'}`}
+          className={`argf-fixed argf-z-50 argf-inset-0 argf-flex argf-items-center argf-justify-center argf-backdrop-blur argf-transition-all argf-transform argf-transition-opacity argf-duration-300 argf-ease-in-out ${animate ? 'argf-opacity-100' : 'argf-opacity-0'}`}
         >
           <div
-            className={`bg-gray-50 px-6 py-5 rounded-lg shadow-lg ${sizeClasses[size]} transform transition-transform duration-300 ease-in-out ${animate ? 'scale-100' : 'scale-95'}`}
+            className={`argf-bg-gray-50 argf-box-border argf-px-6 argf-py-5 argf-rounded-lg argf-shadow-lg ${sizeClasses[size]} argf-transform argf-transition-transform argf-duration-300 argf-ease-in-out ${animate ? 'argf-scale-100' : 'argf-scale-95'}`}
           >
             <div
-              className={`rounded-t-lg flex justify-between items-center ${severityClasses[severity as 'info' | 'danger' | 'warning']}`}
+              className={`argf-rounded-t-lg argf-flex argf-justify-between argf-items-center ${severityClasses[severity as 'info' | 'danger' | 'warning']}`}
             >
-              <div className='flex items-center'>
-                {icon && <div className='mr-2 flex items-center'>{icon}</div>}
-                <h2 className='text-lg font-semibold flex items-center'>
+              <div className='argf-flex argf-items-center'>
+                {icon && <div className='argf-mr-2 argf-flex argf-items-center'>{icon}</div>}
+                <h2 className='argf-text-lg argf-font-semibold argf-flex argf-items-center argf-m-0 argf-p-0'>
                   {header}
                 </h2>
               </div>
               {closeable && (
                 <button
+                  type='button'
                   onClick={onClose}
-                  className='text-dark flex items-center hover:bg-gray-200 p-2 rounded-full'
+                  className='argf-bg-transparent argf-border-0 argf-outline-none argf-text-slate-700 argf-flex argf-items-center hover:argf-bg-gray-200 argf-p-2 argf-rounded-full argf-cursor-pointer'
                 >
                   <XIcon />
                 </button>
               )}
             </div>
-            <div className='text-left pt-2'>{children}</div>
+            <div className='argf-text-left argf-pt-2'>{children}</div>
           </div>
         </div>
       )}
