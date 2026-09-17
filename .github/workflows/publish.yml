@@ -1,10 +1,12 @@
+name: Publish to NPM
+
 on:
   push:
     branches:
       - main
 
 jobs:
-  build:
+  publish:
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -12,7 +14,6 @@ jobs:
       packages: write
 
     steps:
-
       - name: Checkout Repository
         uses: actions/checkout@v4
 
@@ -28,16 +29,10 @@ jobs:
       - name: Install Dependencies
         run: pnpm install
 
-      - name: Get Latest Version
-        run: pnpm getLatestVersion
-        
-      - name: Configure Git
-        run: |
-          git config --global user.email "alghi344@gmail.com"
-          git config --global user.name "argf013"
+      - name: Build Package
+        run: pnpm run build
 
       - name: Publish to npm
-        run: |
-          npm publish --registry=https://registry.npmjs.org
+        run: npm publish --access public --no-git-checks
         env:
           NODE_AUTH_TOKEN: ${{ secrets.PUBLISH_TOKEN }}

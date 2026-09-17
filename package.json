@@ -30,10 +30,11 @@
     "dev": "vite",
     "clean": "rimraf dist",
     "build:css": "npx tailwindcss -c ./tailwind.config.lib.cjs -i ./src/lib.css -o ./style.css",
-    "build": "pnpm run clean && pnpm run build:css && pnpm exec tsc && pnpm exec vite build && pnpm exec grunt bump",
+    "build": "pnpm run clean && pnpm run build:css && pnpm exec tsc && pnpm exec vite build",
+    "release": "pnpm run build && pnpm exec grunt bump",
     "lint": "eslint . --ignore-pattern dist *.cjs",
     "preview": "vite preview",
-    "prepublishOnly": "npm run build",
+    "prepublishOnly": "pnpm run build",
     "getLatestVersion": "node version.cjs",
     "git": "pnpm getLatestVersion && git add ."
   },
