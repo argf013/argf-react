@@ -6,13 +6,19 @@ TypeScript and Vite.
 ## Available Components
 
 1. **Accordion**
-2. **Button**
-3. **Dialog**
-4. **DialogConfirm**
-5. **Dropdown**
-6. **Menu**
-7. **Toast**
-8. **Input**
+2. **Avatar** & **AvatarGroup**
+3. **Badge**
+4. **Button**
+5. **Card**
+6. **Dialog**
+7. **DialogConfirm**
+8. **Dropdown**
+9. **Input**
+10. **Menu**
+11. **Skeleton**
+12. **Switch**
+13. **Tabs**
+14. **Toast**
 
 ## Installation
 

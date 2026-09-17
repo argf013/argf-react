@@ -10,7 +10,7 @@ createRoot(document.getElementById('root')!).render(
   <ToastProvider>
     <Router>
       <Routes>
-        <Route path='/' element={<App />} />
+        <Route path='/*' element={<App />} />
         <Route path='/playground' element={<Playground />} />
       </Routes>
     </Router>

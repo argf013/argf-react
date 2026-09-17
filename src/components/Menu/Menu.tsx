@@ -113,36 +113,43 @@ const Menu: React.FC<MenuProps> = ({
   }, [openMenu]);
 
   return (
-    <div ref={menuRef} className={`relative ${className}`} style={style}>
+    <div ref={menuRef} className={`relative inline-block ${className || ''}`} style={style}>
       <button
-        className='menu-button px-1 bg-transparent text-dark rounded-full hover:bg-gray-300'
+        type='button'
+        aria-haspopup='true'
+        aria-expanded={openMenu}
+        className='menu-button p-2 text-slate-700 rounded-full hover:bg-slate-200 transition-colors flex items-center justify-center'
         onClick={() => setOpenMenu(!openMenu)}
       >
         <KebabHorizontalIcon className={vertical ? 'rotate-90' : ''} />
       </button>
       <div
-        className={`transition-all transform duration-300 ease-in-out ${
+        className={`absolute z-50 left-0 mt-1 transition-all transform duration-200 ease-out ${
           openMenu
             ? 'translate-y-0 opacity-100 scale-100'
-            : '-translate-y-4 opacity-0 scale-95 pointer-events-none'
+            : '-translate-y-2 opacity-0 scale-95 pointer-events-none'
         } origin-top-left`}
       >
         <ul
-          className={`menu-list absolute left-0 my-1 w-full flex gap-3 flex-col bg-white border border-gray-200 shadow-lg rounded ${sizeClasses[size]} ${itemClassName}`}
+          className={`menu-list flex gap-1 flex-col bg-white border border-gray-200 shadow-xl rounded-lg ${sizeClasses[size]} ${itemClassName || ''}`}
           style={itemStyle}
         >
           {items.map((item, index) => (
             <li
               key={index}
-              className={`menu-item hover:underline ${item.disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'} gap-2 flex items-center ${item.danger ? 'text-red-500' : ''}`}
+              className={`menu-item px-2.5 py-1.5 rounded-md transition-colors ${
+                item.disabled
+                  ? 'opacity-40 cursor-not-allowed'
+                  : item.danger
+                    ? 'text-red-600 hover:bg-red-50 cursor-pointer'
+                    : 'text-slate-700 hover:bg-slate-100 cursor-pointer'
+              } gap-2.5 flex items-center`}
               onClick={() => handleClick(item)}
             >
               {item.icon && (
-                <span className={`${item.danger ? 'text-red-500' : ''}`}>
-                  {item.icon}
-                </span>
+                <span className='flex items-center'>{item.icon}</span>
               )}
-              <span className='flex flex-row'>{item.label}</span>
+              <span className='flex-1 whitespace-nowrap'>{item.label}</span>
             </li>
           ))}
         </ul>
