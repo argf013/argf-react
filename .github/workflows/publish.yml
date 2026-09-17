@@ -19,7 +19,6 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '20.x'
-          registry-url: 'https://registry.npmjs.org'
 
       - name: Install pnpm
         run: npm install -g pnpm
@@ -30,7 +29,8 @@ jobs:
       - name: Build Package
         run: pnpm run build
 
-      - name: Publish to npm
-        run: npm publish --access public --no-git-checks
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.PUBLISH_TOKEN }}
+      - name: Configure .npmrc and Publish
+        run: |
+          echo "//registry.npmjs.org/:_authToken=${{ secrets.PUBLISH_TOKEN }}" > ~/.npmrc
+          npm whoami
+          npm publish --access public --no-git-checks
