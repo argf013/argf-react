@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { NavLink, Outlet, useLocation } from 'react-router-dom';
 import {
   PackageIcon,
@@ -17,6 +17,7 @@ import {
   PeopleIcon,
   SquareIcon,
   BellIcon,
+  LinkIcon,
 } from '@primer/octicons-react';
 
 export interface NavItem {
@@ -63,7 +64,7 @@ export const navigationGroups: NavGroup[] = [
     category: 'Navigation',
     items: [
       { path: '/components/accordion', label: 'Accordion', icon: <RowsIcon /> },
-      { path: '/components/menu', label: 'Menu (Kebab)', icon: <ColumnsIcon /> },
+      { path: '/components/menu', label: 'Menu', icon: <ThreeBarsIcon /> },
       { path: '/components/tabs', label: 'Tabs', icon: <ColumnsIcon /> },
     ],
   },
@@ -73,7 +74,7 @@ export const navigationGroups: NavGroup[] = [
       { path: '/components/badge', label: 'Badge', icon: <TagIcon /> },
       { path: '/components/avatar', label: 'Avatar', icon: <PeopleIcon /> },
       { path: '/components/card', label: 'Card', icon: <SquareIcon /> },
-      { path: '/components/skeleton', label: 'Skeleton', icon: <PackageIcon /> },
+      { path: '/components/skeleton', label: 'Skeleton', icon: <RowsIcon /> },
     ],
   },
   {
@@ -84,9 +85,17 @@ export const navigationGroups: NavGroup[] = [
   },
 ];
 
+interface TocHeading {
+  id: string;
+  text: string;
+  level: number;
+}
+
 export const DocsLayout: React.FC = () => {
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  const [headings, setHeadings] = useState<TocHeading[]>([]);
+  const [activeHeadingId, setActiveHeadingId] = useState<string>('');
   const location = useLocation();
 
   // Filter navigation items by search
@@ -98,6 +107,70 @@ export const DocsLayout: React.FC = () => {
       ),
     }))
     .filter((group) => group.items.length > 0);
+
+  // Scan headings on page change for "On this page" TOC
+  useEffect(() => {
+    // Slight delay to ensure child component has rendered
+    const timer = setTimeout(() => {
+      const mainElement = document.querySelector('main');
+      if (!mainElement) return;
+
+      const elements = Array.from(mainElement.querySelectorAll('h1, h2, h3'));
+      const items: TocHeading[] = [];
+
+      elements.forEach((el, index) => {
+        const text = el.textContent?.trim() || '';
+        if (!text || text === 'argf-react' || text === 'Overview' || text === 'Installation') return;
+
+        let id = el.id;
+        if (!id) {
+          id = text
+            .toLowerCase()
+            .replace(/[^\w\s-]/g, '')
+            .replace(/\s+/g, '-');
+          if (!id) id = `heading-${index}`;
+          el.id = id;
+        }
+
+        const level = el.tagName === 'H1' ? 1 : el.tagName === 'H2' ? 2 : 3;
+        items.push({ id, text, level });
+      });
+
+      setHeadings(items);
+      if (items.length > 0) {
+        setActiveHeadingId(items[0].id);
+      }
+    }, 150);
+
+    return () => clearTimeout(timer);
+  }, [location.pathname]);
+
+  // Track active heading on window scroll
+  useEffect(() => {
+    const handleScroll = () => {
+      if (headings.length === 0) return;
+      const scrollPosition = window.scrollY + 120;
+
+      for (let i = headings.length - 1; i >= 0; i--) {
+        const el = document.getElementById(headings[i].id);
+        if (el && el.offsetTop <= scrollPosition) {
+          setActiveHeadingId(headings[i].id);
+          return;
+        }
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [headings]);
+
+  const scrollToHeading = (id: string) => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    const yOffset = -80;
+    const y = el.getBoundingClientRect().top + window.pageYOffset + yOffset;
+    window.scrollTo({ top: y, behavior: 'smooth' });
+  };
 
   return (
     <div className='min-h-screen bg-slate-50/60 text-slate-800 font-sans'>
@@ -123,7 +196,7 @@ export const DocsLayout: React.FC = () => {
                   argf-react
                 </span>
                 <span className='ml-2 text-xs font-mono font-medium px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 border border-slate-200'>
-                  v2.1.40
+                  v2.1.42
                 </span>
               </div>
             </NavLink>
@@ -175,9 +248,9 @@ export const DocsLayout: React.FC = () => {
         />
       )}
 
-      {/* Docs Shell: Fixed Sidebar + Window Scroll Main Content */}
+      {/* Docs Shell: Fixed Sidebar + Window Scroll Main Content + Right TOC */}
       <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 flex gap-8'>
-        {/* Left Dashboard Sidebar - FIXED Viewport Position (Never moves on scroll) */}
+        {/* Left Dashboard Sidebar - FIXED Viewport Position */}
         <aside
           className={`fixed top-16 bottom-0 left-0 z-30 w-72 bg-white/95 backdrop-blur-md border-r border-slate-200/90 p-5 overflow-y-auto transform transition-transform duration-200 ease-in-out lg:translate-x-0 lg:left-auto lg:w-64 lg:p-0 lg:py-6 lg:bg-transparent lg:border-0 ${
             mobileSidebarOpen ? 'translate-x-0 shadow-2xl' : '-translate-x-full'
@@ -226,11 +299,11 @@ export const DocsLayout: React.FC = () => {
           </div>
         </aside>
 
-        {/* Spacer on Desktop so Main Content doesn't overlap the fixed sidebar */}
+        {/* Spacer on Desktop so Main Content doesn't overlap the fixed left sidebar */}
         <div className='hidden lg:block w-64 flex-shrink-0' aria-hidden='true' />
 
         {/* Main Content Area (uses default browser window scrollbar) */}
-        <main className='flex-1 min-w-0 py-6'>
+        <main className='flex-1 min-w-0 py-6 max-w-3xl'>
           <Outlet />
 
           <footer className='pt-16 pb-8 text-center text-xs text-slate-500 border-t border-slate-200/80 mt-16'>
@@ -238,6 +311,42 @@ export const DocsLayout: React.FC = () => {
             <p className='mt-1 text-slate-400'>argf-react • Open Source Component Library</p>
           </footer>
         </main>
+
+        {/* Right Sticky Sidebar - "On this page" TOC (Visible on XL screens) */}
+        {headings.length > 0 && (
+          <aside className='hidden xl:block w-56 flex-shrink-0'>
+            <div className='sticky top-24 pl-4 border-l border-slate-200/80 space-y-3'>
+              <div className='flex items-center gap-1.5 text-xs font-bold text-slate-900 uppercase tracking-wider'>
+                <LinkIcon size={12} className='text-slate-400' />
+                <span>On this page</span>
+              </div>
+              <ul className='space-y-1.5 text-xs'>
+                {headings.map((h) => {
+                  const isActive = activeHeadingId === h.id;
+                  return (
+                    <li
+                      key={h.id}
+                      style={{ paddingLeft: h.level === 3 ? '0.75rem' : '0' }}
+                    >
+                      <button
+                        type='button'
+                        onClick={() => scrollToHeading(h.id)}
+                        className={`text-left block w-full truncate transition-colors py-0.5 ${
+                          isActive
+                            ? 'text-blue-600 font-semibold'
+                            : 'text-slate-500 hover:text-slate-900'
+                        }`}
+                        title={h.text}
+                      >
+                        {h.text}
+                      </button>
+                    </li>
+                  );
+                })}
+              </ul>
+            </div>
+          </aside>
+        )}
       </div>
     </div>
   );
