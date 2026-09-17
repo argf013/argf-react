@@ -10,7 +10,6 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
-      id-token: write
 
     steps:
       - name: Checkout Repository
@@ -31,7 +30,7 @@ jobs:
       - name: Build Package
         run: pnpm run build
 
-      - name: Publish to npm (Provenance / Trusted Publishing)
-        run: npm publish --access public --no-git-checks --provenance
+      - name: Publish to npm
+        run: npm publish --access public --no-git-checks
         env:
           NODE_AUTH_TOKEN: ${{ secrets.PUBLISH_TOKEN }}
